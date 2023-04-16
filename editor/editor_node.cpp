@@ -6672,6 +6672,7 @@ int EditorNode::execute_and_show_output(const String &p_title, const String &p_p
 	}
 
 	eta.execute_output_thread.wait_to_finish();
+	execute_outputs->add_text("\nOutput: " + eta.output);
 	execute_outputs->add_text("\nExit Code: " + itos(eta.exitcode));
 
 	if (execute_output_dialog) {
@@ -6684,6 +6685,7 @@ int EditorNode::execute_and_show_output(const String &p_title, const String &p_p
 
 		execute_output_dialog->get_ok_button()->set_disabled(false);
 	}
+	print_line(vformat("Output: %s", eta.output));
 
 	return eta.exitcode;
 }

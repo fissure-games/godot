@@ -1776,6 +1776,8 @@ void EditorExportPlatformAndroid::get_export_options(List<ExportOption> *r_optio
 		r_options->push_back(ExportOption(PropertyInfo(Variant::BOOL, vformat("%s/%s", PNAME("permissions"), String(*perms).to_lower())), false));
 		perms++;
 	}
+	
+	r_options->push_back(ExportOption(PropertyInfo(Variant::DICTIONARY, "manifest/metadata"), Dictionary()));
 }
 
 String EditorExportPlatformAndroid::get_name() const {

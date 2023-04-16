@@ -354,6 +354,20 @@ String _get_application_tag(const Ref<EditorExportPreset> &p_preset, bool p_has_
 			manifest_application_text += "        <meta-data tools:node=\"replace\" android:name=\"com.oculus.handtracking.version\" android:value=\"V2.0\" />\n";
 		}
 	}
+	
+	Dictionary additional_metadata = p_preset->get("manifest/metadata");
+	List<Variant> keys;
+	additional_metadata.get_key_list(&keys);
+	for (int i = 0; i < keys.size(); i++) {
+		Variant key = keys[i];
+		Variant value = additional_metadata[key];
+		if (value.get_type == Variant::STRING) {
+			manifest_application_text += vformat(
+					"        <meta-data tools:node=\"replace\" android:name=\"%s\" android:value=\"%s\" />\n",
+					key, value);
+		}
+	}
+
 	manifest_application_text += _get_activity_tag(p_preset, uses_xr);
 	manifest_application_text += "    </application>\n";
 	return manifest_application_text;
