@@ -354,7 +354,7 @@ String _get_application_tag(const Ref<EditorExportPreset> &p_preset, bool p_has_
 			manifest_application_text += "        <meta-data tools:node=\"replace\" android:name=\"com.oculus.handtracking.version\" android:value=\"V2.0\" />\n";
 		}
 	}
-	
+
 	Dictionary additional_metadata = p_preset->get("manifest/metadata");
 	List<Variant> keys;
 	additional_metadata.get_key_list(&keys);
