@@ -576,6 +576,42 @@ String OS_Unix::get_executable_path() const {
 #endif
 }
 
+void OS_Unix::create_desktop_entry() const {
+	String path = get_executable_path();
+	String icon_path = path.get_base_dir().path_join("../icon.png");
+	String desktop_dir = get_data_path().path_join("applications");
+
+	Error err;
+	if (!(DirAccess::exists(desktop_dir))) {
+		// Ensure the directory exists.
+		Ref<DirAccess> da = DirAccess::create(DirAccess::ACCESS_FILESYSTEM);
+		err = da->make_dir_recursive(desktop_dir);
+		ERR_FAIL_COND_MSG(err != OK, "Error attempting to create applications dir: " + desktop_dir + ".");
+	}
+
+	String desktop_path = desktop_dir.path_join("godot.desktop");
+
+	String desktop_file_contents = "[Desktop Entry]\n"
+								   "Name=Godot Engine\n"
+								   "Comment=Godot Engine\n"
+								   "Exec=" +
+								   path + "\n"
+										  "Icon=" +
+								   icon_path + "\n"
+											   "Terminal=false\n"
+											   "Type=Application\n"
+											   "Categories=Development;\n"
+											   "StartupNotify=true\n";
+
+	Ref<FileAccess> f = FileAccess::open(desktop_path, FileAccess::WRITE, &err);
+	if (err != OK) {
+		ERR_PRINT("Could not create desktop entry file.");
+		return;
+	}
+	f->store_string(desktop_file_contents);
+	f->close();
+}
+
 void UnixTerminalLogger::log_error(const char *p_function, const char *p_file, int p_line, const char *p_code, const char *p_rationale, bool p_editor_notify, ErrorType p_type) {
 	if (!should_log(true)) {
 		return;

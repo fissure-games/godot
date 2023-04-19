@@ -90,6 +90,7 @@ public:
 
 	virtual String get_executable_path() const override;
 	virtual String get_user_data_dir() const override;
+	virtual void create_desktop_entry() const override;
 };
 
 class UnixTerminalLogger : public StdLogger {
