@@ -2521,9 +2521,21 @@ void ProjectManager::_language_selected(int p_id) {
 
 #if LINUXBSD_ENABLED
 void ProjectManager::_add_desktop_entry() {
-	String path = OS::get_singleton()->get_executable_path();
+	OS *os = OS::get_singleton();
+	String path = os->get_executable_path();
 	String icon_path = path.get_base_dir().path_join("../godot_icon.png");
-	String desktop_path = path.get_base_dir().path_join("godot.desktop");
+	String desktop_dir = os->get_data_path().path_join("applications");
+
+	Error err;
+	if (!(DirAccess::exists(desktop_dir))) {
+		// Ensure the directory exists.
+		Ref<DirAccess> da = DirAccess::create(DirAccess::ACCESS_FILESYSTEM);
+		err = da->make_dir_recursive(desktop_dir);
+		ERR_FAIL_COND_MSG(err != OK, "Error attempting to create applications dir: " + desktop_dir + ".");
+	}
+
+	String desktop_path = desktop_dir.path_join("godot.desktop");
+
 	String desktop_file_contents = "[Desktop Entry]\n"
 								   "Name=Godot Engine\n"
 								   "Comment=Godot Engine\n"
@@ -2536,7 +2548,6 @@ void ProjectManager::_add_desktop_entry() {
 											   "Categories=Development;\n"
 											   "StartupNotify=true\n";
 
-	Error err;
 	Ref<FileAccess> f = FileAccess::open(desktop_path, FileAccess::WRITE, &err);
 	if (err != OK) {
 		ERR_PRINT("Could not create desktop entry file.");
