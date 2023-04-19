@@ -361,7 +361,7 @@ String _get_application_tag(const Ref<EditorExportPreset> &p_preset, bool p_has_
 	for (int i = 0; i < keys.size(); i++) {
 		Variant key = keys[i];
 		Variant value = additional_metadata[key];
-		if (value.get_type == Variant::STRING) {
+		if (value.get_type() == Variant::STRING) {
 			manifest_application_text += vformat(
 					"        <meta-data tools:node=\"replace\" android:name=\"%s\" android:value=\"%s\" />\n",
 					key, value);

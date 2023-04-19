@@ -2519,6 +2519,34 @@ void ProjectManager::_language_selected(int p_id) {
 	language_restart_ask->popup_centered();
 }
 
+#if LINUXBSD_ENABLED
+void ProjectManager::_add_desktop_entry() {
+	String path = OS::get_singleton()->get_executable_path();
+	String icon_path = path.get_base_dir().path_join("../godot_icon.png");
+	String desktop_path = path.get_base_dir().path_join("godot.desktop");
+	String desktop_file_contents = "[Desktop Entry]\n"
+								   "Name=Godot Engine\n"
+								   "Comment=Godot Engine\n"
+								   "Exec=" +
+								   path + "\n"
+										  "Icon=" +
+								   icon_path + "\n"
+											   "Terminal=false\n"
+											   "Type=Application\n"
+											   "Categories=Development;\n"
+											   "StartupNotify=true\n";
+
+	Error err;
+	Ref<FileAccess> f = FileAccess::open(desktop_path, FileAccess::WRITE, &err);
+	if (err != OK) {
+		ERR_PRINT("Could not create desktop entry file.");
+		return;
+	}
+	f->store_string(desktop_file_contents);
+	f->close();
+}
+#endif
+
 void ProjectManager::_restart_confirm() {
 	List<String> args = OS::get_singleton()->get_cmdline_args();
 	Error err = OS::get_singleton()->create_instance(args);
@@ -2840,6 +2868,13 @@ ProjectManager::ProjectManager() {
 		erase_missing_btn->connect("pressed", callable_mp(this, &ProjectManager::_erase_missing_projects));
 		tree_vb->add_child(erase_missing_btn);
 
+#if LINUXBSD_ENABLED
+		add_desktop_entry_btn = memnew(Button);
+		add_desktop_entry_btn->set_text(TTR("Create Desktop Entry"));
+		add_desktop_entry_btn->add_theme_constant_override("h_separation", btn_h_separation);
+		add_desktop_entry_btn->connect("pressed", callable_mp(this, &ProjectManager::_add_desktop_entry));
+		tree_vb->add_child(add_desktop_entry_btn);
+#endif
 		tree_vb->add_spacer();
 
 		about_btn = memnew(Button);

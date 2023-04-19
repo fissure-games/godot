@@ -74,6 +74,10 @@ class ProjectManager : public Control {
 	Button *erase_missing_btn = nullptr;
 	Button *about_btn = nullptr;
 
+#if LINUXBSD_ENABLED
+	Button *add_desktop_entry_btn = nullptr;
+#endif
+
 	HBoxContainer *local_projects_hb = nullptr;
 	EditorAssetLibrary *asset_library = nullptr;
 
@@ -126,6 +130,9 @@ class ProjectManager : public Control {
 	void _restart_confirm();
 	void _confirm_update_settings();
 	void _nonempty_confirmation_ok_pressed();
+#if LINUXBSD_ENABLED
+	void _add_desktop_entry();
+#endif
 
 	void _load_recent_projects();
 	void _on_project_created(const String &dir);
