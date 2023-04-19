@@ -2523,7 +2523,7 @@ void ProjectManager::_language_selected(int p_id) {
 void ProjectManager::_add_desktop_entry() {
 	OS *os = OS::get_singleton();
 	String path = os->get_executable_path();
-	String icon_path = path.get_base_dir().path_join("../godot_icon.png");
+	String icon_path = path.get_base_dir().path_join("../icon.png");
 	String desktop_dir = os->get_data_path().path_join("applications");
 
 	Error err;
