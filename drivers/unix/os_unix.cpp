@@ -592,14 +592,16 @@ void OS_Unix::create_desktop_entry() const {
 	String desktop_path = desktop_dir.path_join("godot.desktop");
 
 	String desktop_file_contents = "[Desktop Entry]\n"
-		"Name=Godot Engine\n"
-		"Comment=Godot Engine\n"
-		"Exec=" + path + "\n"
-		"Icon=" + icon_path + "\n"
-		"Terminal=false\n"
-		"Type=Application\n"
-		"Categories=Development;\n"
-		"StartupNotify=true\n";
+								   "Name=Godot Engine\n"
+								   "Comment=Godot Engine\n"
+								   "Exec=" +
+			path + "\n"
+				   "Icon=" +
+			icon_path + "\n"
+						"Terminal=false\n"
+						"Type=Application\n"
+						"Categories=Development;\n"
+						"StartupNotify=true\n";
 
 	Ref<FileAccess> f = FileAccess::open(desktop_path, FileAccess::WRITE, &err);
 	if (err != OK) {
